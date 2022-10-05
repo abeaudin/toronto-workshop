@@ -72,7 +72,7 @@ sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
   ```
 
 ### Provision LKE Cluster using Terraform
-![image](https://user-images.githubusercontent.com/7717493/194059289-391a9971-c511-45e1-a4c7-5bee268adb63.png)
+![image](https://user-images.githubusercontent.com/7717493/194061886-5dc2dee1-8611-4ab3-9200-b5cde6aea221.png)
 
 Next, we build the LKE cluster, with the terraform files that are included in this repository, and pulled into the Linode Shell from the prior git command.
 
@@ -99,7 +99,7 @@ terraform plan \
 Once deployment is complete, you should see an LKE cluster within the "Kubernetes" section of your Linode Cloud Manager account.
 
 ### Deploy Containers to LKE 
-![k8](https://user-images.githubusercontent.com/19197357/184130510-08d983b6-109c-4bdb-b50c-db97fec3571d.png)
+![image](https://user-images.githubusercontent.com/7717493/194061837-e8846d2c-6669-49cd-9d45-395126442fe4.png)
 
 Next step is to use kubectl to deploy the cockroach db container to the LKE cluster. 
 
