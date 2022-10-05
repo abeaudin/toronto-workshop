@@ -15,8 +15,7 @@ Package of template files, examples, and illustrations for the Chicago Linode Wo
 
 ### Overview
 
-![workshop](https://user-images.githubusercontent.com/19197357/184126261-b94fbec5-a05d-4068-b8f1-3d00fd92fc00.png)
-
+![image](https://user-images.githubusercontent.com/7717493/194063848-45d8649a-8f31-41c0-b391-d585a13bd626.png)
 The scenario is written to demonstrate the deployment of cockroachdb on an LKE Cluster
 
 The workshop scenario builds the following components and steps-
