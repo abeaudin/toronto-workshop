@@ -1,4 +1,4 @@
-Chicago Linode Workshop
+Toronto Linode Workshop
 ======================
 
 # About
@@ -9,7 +9,7 @@ Package of template files, examples, and illustrations for the Chicago Linode Wo
 
 ## Template Files
 - Sample Terraform files for deploying an LKE cluster on Linode.
-- Sample kubernetes deployment files for starting an application on an LKE cluster.
+- Sample kubernetes deployment files for running CockroachDB on an LKE cluster.
 
 ## Step by Step Instructions
 
@@ -17,19 +17,18 @@ Package of template files, examples, and illustrations for the Chicago Linode Wo
 
 ![workshop](https://user-images.githubusercontent.com/19197357/184126261-b94fbec5-a05d-4068-b8f1-3d00fd92fc00.png)
 
-The scenario is written to approximate deployment of a resillient, multi-region application for use in a failover or other situation where it would be necessary to serve from an alternate origin.
+The scenario is written to demonstrate the deployment of cockroachdb on an LKE Cluster
 
 The workshop scenario builds the following components and steps-
 
-1. A Secure Shell Linode (provisioned via the Linode Cloud Manager GUI) to serve as the command console for the envirnoment setup.
+1. A Secure Shell Linode (provisioned via the Linode Cloud Manager GUI) to serve as the command console for the environment setup.
 
-2. Installing developer tools on the Secure Shell (git, terraform, and kubectl) for use in envinroment setup.
+2. Installing developer tools on the Secure Shell (git, terraform, and kubectl) for use in environment setup.
 
-3. Two Linode Kubernetes Engine (LKE) Clusters, each deployed to a different Linode region, provisioned via terraform.
+3. One Linode Kubernetes Engine (LKE) Clusters, deployed to a the Toronto Linode region, provisioned via terraform.
 
-4. Deploying an NGINX container to each LKE cluster, and exposing an HTTP service from this deployment- this container includes static HTML content that at-present runs a browser-based Asteroids game.
+4. Deploying the cockroach db container to the LKE cluster.
 
-5. Applying Akamai Delivery, Security, and other advanced features in front of these clusters, including Global Traffic Management, Site Failover, and Visitor Prioritization.
 
 ### Build a Secure Shell Linode
 ![shell](https://user-images.githubusercontent.com/19197357/184126449-454162f9-142f-47e6-ab73-3f1da5e5f456.png)
@@ -52,7 +51,7 @@ sudo apt-get install git
 2. Pull down this repository to the Linode machine-
 
 ```
-git init && git pull https://github.com/ccie7599/chicago-workshop
+git init && git pull https://github.com/abeaudin/toronto-workshop-public
 ```
 
 ### Install Terraform 
@@ -64,17 +63,18 @@ sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
 ```
  wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
  ```
+ NOTE: This command will results in garbage on the screen, this is ok.
  ```
  echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
  ```
- ```
+  ```
   sudo apt update && sudo apt-get install terraform
   ```
 
-### Provision LKE Clusters using Terraform
+### Provision LKE Cluster using Terraform
 ![tf](https://user-images.githubusercontent.com/19197357/184130473-91c36dfc-072b-43f7-882b-07407d7f2266.png)
 
-Next, we build LKE clusters, with the terraform files that are included in this repository, and pulled into the Linode Shell from the prior git command.
+Next, we build the LKE cluster, with the terraform files that are included in this repository, and pulled into the Linode Shell from the prior git command.
 
 1. From the Linode Cloud Manager, create an API token and copy it's value (NOTE- the Token should have full read-write access to all Linode components in order to work properly with terraform).
 
@@ -86,22 +86,22 @@ export TF_VAR_token=[api token value]
 ```
 terraform init 
 ```
-4. Next, we'll use the supplied terraform files to provision the LKE clusters. First, run the "terraform plan" command to view the plan prior to deployment-
+4. Next, we'll use the supplied terraform files to provision the LKE cluster. First, run the "terraform plan" command to view the plan prior to deployment-
 ```
 terraform plan \
  -var-file="terraform.tfvars"
  ```
- 5. Run "terraform apply" to deploy the plan to Linode and build your LKE clusters-
+ 5. Run "terraform apply" to deploy the plan to Linode and build your LKE cluster-
  ```
  terraform apply \
  -var-file="terraform.tfvars"
  ```
-Once deployment is complete, you should see 2 LKE clusters within the "Kubernetes" section of your Linode Cloud Manager account.
+Once deployment is complete, you should see an LKE cluster within the "Kubernetes" section of your Linode Cloud Manager account.
 
 ### Deploy Containers to LKE 
 ![k8](https://user-images.githubusercontent.com/19197357/184130510-08d983b6-109c-4bdb-b50c-db97fec3571d.png)
 
-Next step is to use kubectl to deploy the NGINX endpoints to each LKE cluster. 
+Next step is to use kubectl to deploy the cockroach db container to the LKE cluster. 
 
 1. Install kubectl via the below commands from the Linode shell-
 ```
@@ -115,14 +115,11 @@ sudo apt-get update && sudo apt-get install -y kubectl
 ```
 2. Extract the needed kubeconfig from each cluster into a yaml file from the terraform output.
 ```
- export KUBE_VAR=`terraform output kubeconfig_1` && echo $KUBE_VAR | base64 -di > lke-cluster-config1.yaml
-```
-```
- export KUBE_VAR=`terraform output kubeconfig_2` && echo $KUBE_VAR | base64 -di > lke-cluster-config2.yaml
+ export KUBE_VAR=`terraform output kubeconfig_1` && echo $KUBE_VAR | base64 -di > lke-cluster-config.yaml
 ```
 3. Define the yaml file output from the prior step as the kubeconfig.
 ```
-export KUBECONFIG=lke-cluster-config1.yaml:lke-cluster-config2.yaml
+export KUBECONFIG=lke-cluster-config.yaml
 ```
 4. You can now use kubectl to manage the first LKE cluster. Enter the below command to view a list of clusters, and view which cluster is currently being managed.
 ```
@@ -146,40 +143,6 @@ kubectl create -f service.yaml
 ```
 kubectl get services -A
 ```
-This command output should show a nginx-workshop deployment, with an external (Internet-routable, non-RFC1918) IP address. Make note of this external IP address as it represents the ingress point to your cluster application.
-
-9. Deploy the application to the second LKE cluster. First, view the list of clusters with the below command.
-```
-kubectl config get-contexts
-```
-10. This will show a list of clusters, and the cluster currently being managed will have an asterisk next to it. Since we've already deployed our service to the first cluster, we have to switch to the second cluster. Type the below command, replacing [cluster2] with the name of the 2nd cluster in the list. 
-```
-kubectl config use-context [cluster2]
-```
-You could then run the Step 8 command (kubectl config get-contexts) again to verify that the active context has been set. 
-
-11. Deploy an application to the second LKE cluster, using the deployment.yaml file included in this repository.
-```
-kubectl create -f deployment.yaml
-```
-12. For the 2nd cluster, we have to set our certificate and key as secrets for TLS to work.
-```
-kubectl create secret tls mqtttest --cert cert.pem --key key.pem
-```
-13. Deploy the service.yaml included in the repository via kubectl to allow inbound traffic.
-```
-kubectl create -f service.yaml
-```
-14. Validate that the service is running, and obtain it's external IP address.
-```
-kubectl get services -A
-```
-As with the first cluster, record the external IP of the service for the 2nd cluster. 
-
 ### Summary of Linode Provisioning 
 
-With the work above done, you've successfully setup redundant clusters in multiple linode regions, and deployed an endpoint application to each. The subsequent Akamai-centric steps in this workshop will use these deployments in various ways, depending on the use case.
-
-- As an alternate origin for site failover cases.
-- As a waiting room application for Visitor priorization.
-- To demonstrate Global Traffic Management capability for various multi-oriign scenarios (failover, load-balancing, performance, custom routing, geo-map, etc.).
+With the work above done, you've successfully setup a cluster in the Toronto regions, and deployed the cockroach db application to it. 
