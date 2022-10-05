@@ -72,7 +72,7 @@ sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
   ```
 
 ### Provision LKE Cluster using Terraform
-![tf](https://user-images.githubusercontent.com/19197357/184130473-91c36dfc-072b-43f7-882b-07407d7f2266.png)
+![image](https://user-images.githubusercontent.com/7717493/194059289-391a9971-c511-45e1-a4c7-5bee268adb63.png)
 
 Next, we build the LKE cluster, with the terraform files that are included in this repository, and pulled into the Linode Shell from the prior git command.
 
