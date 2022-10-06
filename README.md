@@ -35,19 +35,14 @@ The workshop scenario builds the following components and steps-
 We'll first create a Linode using the "Secure Your Server" Marketplace image. This will give us a hardened, consistent environment to run our subsequent commands from. 
 
 1. Login to Linode Cloud Manager, Select "Create Linode," and choose the "Secure Your Server" Marketplace image. 
-2. Within the setup template for "Secure Your Server," select the Debian 11 image type. 
+2. Within the setup template for "Secure Your Server," select the Ubuntu 20.04 LTS image type. 
 3. Once your Linode is running, login to it's shell (either using the web-based LISH console from Linode Cloud Manager, or via your SSH client of choice).
 
 ### Install and Run git 
 
-Next step is to install git, and pull this repository to the Secure Shell Linode. The repository includes terraform and kubernetes configuration files that we'll need for subsequent steps.
+Next step is to init git, and pull this repository to the Secure Shell Linode. The repository includes terraform and kubernetes configuration files that we'll need for subsequent steps.
 
-1. Install git via the SSH or LISH shell-
-
-```
-sudo apt-get install git
-```
-2. Pull down this repository to the Linode machine-
+1. Pull down this repository to the Linode machine-
 
 ```
 git init && git pull https://github.com/abeaudin/toronto-workshop-public
