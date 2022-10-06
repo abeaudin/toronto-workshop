@@ -113,6 +113,8 @@ sudo apt-get update && sudo apt-get install -y kubectl
 ```
 export KUBECONFIG=lke-cluster-config.yaml
 ```
+4. Install helm
+```
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
 ```
 ```
@@ -121,12 +123,16 @@ chmod 700 get_helm.sh
 ```
 ./get_helm.sh
 ```
+
+5. Configure helm with the elastic repo
 ```
 helm repo add elastic https://helm.elastic.co
 ```
 ```
 helm repo update
 ```
+
+6. Install ELK stack on the LKE Cluster
 ```
 helm install elasticsearch elastic/elasticsearch
 ```
@@ -138,13 +144,9 @@ helm install kibana -l app=kibana-kibana
 ```
 
 
-4. Install and configure helm
-```
-6. Deploy an application to the first LKE cluster, using the deployment.yaml file included in this repository.
-```
-kubectl create -f deployment.yaml
-```
-6. Next, we need to set our certificate and private key values as kubeconfig secrets. This will allow us to enable TLS on our LKE clusters. 
+
+
+7. Next, we need to set our certificate and private key values as kubeconfig secrets. This will allow us to enable TLS on our LKE clusters. 
 
 NOTE: For ease of the workshop, the certificate and key are included in the repository. This is not a recommended practice.
 ```
