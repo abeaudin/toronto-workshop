@@ -3,20 +3,20 @@ Toronto Linode Workshop
 
 # About
 
-Package of template files, examples, and illustrations for the Chicago Linode Workshop.
+Package of template files, examples, and illustrations for the Toronto Linode Workshop.
 
 # Contents
 
 ## Template Files
 - Sample Terraform files for deploying an LKE cluster on Linode.
-- Sample kubernetes deployment files for running CockroachDB on an LKE cluster.
+- Sample kubernetes deployment files for running the ELK stack on an LKE cluster.
 
 ## Step by Step Instructions
 
 ### Overview
 
 ![image](https://user-images.githubusercontent.com/7717493/194063848-45d8649a-8f31-41c0-b391-d585a13bd626.png)
-The scenario is written to demonstrate the deployment of cockroachdb on an LKE Cluster
+The scenario is written to demonstrate the deployment of an ELK stack on an LKE Cluster
 
 The workshop scenario builds the following components and steps-
 
@@ -24,9 +24,9 @@ The workshop scenario builds the following components and steps-
 
 2. Installing developer tools on the Secure Shell (git, terraform, and kubectl) for use in environment setup.
 
-3. One Linode Kubernetes Engine (LKE) Clusters, deployed to a the Toronto Linode region, provisioned via terraform.
+3. One Linode Kubernetes Engine (LKE) Cluster, deployed to a the Toronto Linode region, provisioned via terraform.
 
-4. Deploying the cockroach db container to the LKE cluster.
+4. Deploying the ELK stack to the LKE cluster.
 
 
 ### Build a Secure Shell Linode
@@ -93,7 +93,7 @@ Once deployment is complete, you should see an LKE cluster within the "Kubernete
 ### Deploy Containers to LKE 
 ![image](https://user-images.githubusercontent.com/7717493/194061837-e8846d2c-6669-49cd-9d45-395126442fe4.png)
 
-Next step is to use kubectl to deploy the cockroach db container to the LKE cluster. 
+Next step is to use kubectl to deploy the elastic stack to the LKE cluster. 
 
 1. Install kubectl via the below commands from the Linode shell-
 ```
@@ -113,11 +113,34 @@ sudo apt-get update && sudo apt-get install -y kubectl
 ```
 export KUBECONFIG=lke-cluster-config.yaml
 ```
-4. You can now use kubectl to manage the first LKE cluster. Enter the below command to view a list of clusters, and view which cluster is currently being managed.
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
 ```
-kubectl config get-contexts
 ```
-5. Deploy an application to the first LKE cluster, using the deployment.yaml file included in this repository.
+chmod 700 get_helm.sh
+```
+```
+./get_helm.sh
+```
+```
+helm repo add elastic https://helm.elastic.co
+```
+```
+helm repo update
+```
+```
+helm install elasticsearch elastic/elasticsearch
+```
+```
+helm install filebeat elastic/filebeat
+```
+```
+helm install kibana -l app=kibana-kibana 
+```
+
+
+4. Install and configure helm
+```
+6. Deploy an application to the first LKE cluster, using the deployment.yaml file included in this repository.
 ```
 kubectl create -f deployment.yaml
 ```
