@@ -9,7 +9,7 @@ Package of template files, examples, and illustrations for the Toronto Linode Wo
 
 ## Template Files
 - Sample Terraform files for deploying an LKE cluster on Linode.
-- Sample kubernetes deployment files for running the ELK stack on an LKE cluster.
+- Sample kubernetes deployment files and helm instructions for running the ELK stack on an LKE cluster.
 
 ## Step by Step Instructions
 
