@@ -109,6 +109,9 @@ sudo apt-get update && sudo apt-get install -y kubectl
 ```
  export KUBE_VAR=`terraform output kubeconfig_1` && echo $KUBE_VAR | base64 -di > lke-cluster-config.yaml
 ```
+```
+chmod 400 lke-cluster-config.yaml
+```
 3. Define the yaml file output from the prior step as the kubeconfig.
 ```
 export KUBECONFIG=lke-cluster-config.yaml
