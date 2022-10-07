@@ -177,6 +177,8 @@ kubectl create -f service.yaml
 ```
 kubectl get services -A
 ```
+** Note: If your service shows as pending and it won't change, check to make sure that you're not at your nodebalancer limit.
+
 ### Summary of Linode Provisioning 
 
-With the work above done, you've successfully setup a cluster in the Toronto regions, and deployed the cockroach db application to it. 
+With the work above done, you've successfully setup a cluster in the Toronto region, and deployed the ELK stack to an LKE Cluster in it.
