@@ -13,7 +13,7 @@ provider "linode" {
 
 //Use the linode_lke_cluster resource to create
 //a Kubernetes cluster
-resource "linode_lke_cluster" "cockroach_db_cluster" {
+resource "linode_lke_cluster" "elastic_cluster" {
     k8s_version = var.k8s_version
     label = var.label
     region = var.region
@@ -30,23 +30,23 @@ resource "linode_lke_cluster" "cockroach_db_cluster" {
 
 //Export this cluster's attributes
 output "kubeconfig_1" {
-   value = linode_lke_cluster.cockroach_db_cluster.kubeconfig
+   value = linode_lke_cluster.elastic_cluster.kubeconfig
    sensitive = true
 }
 
 output "api_endpoints" {
-   value = linode_lke_cluster.cockroach_db_cluster.api_endpoints
+   value = linode_lke_cluster.elastic_cluster.api_endpoints
 }
 
 output "status" {
-   value = linode_lke_cluster.cockroach_db_cluster.status
+   value = linode_lke_cluster.elastic_cluster.status
 }
 
 output "id" {
-   value = linode_lke_cluster.cockroach_db_cluster.id
+   value = linode_lke_cluster.elastic_cluster.id
 }
 
 output "pool" {
-   value = linode_lke_cluster.cockroach_db_cluster.pool
+   value = linode_lke_cluster.elastic_cluster.pool
 }
     
