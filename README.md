@@ -146,8 +146,22 @@ helm install filebeat elastic/filebeat
 helm install kibana elastic/kibana
 ```
 
-
-
+Once these command have been executed, watch the deployment with 
+```
+kubectl get pods -w
+```
+until you see output like
+```
+/home/workshop# kubectl get pods
+NAME                             READY   STATUS    RESTARTS   AGE
+elasticsearch-master-0           0/1     Running   0          107s
+elasticsearch-master-1           0/1     Running   0          107s
+elasticsearch-master-2           0/1     Running   0          107s
+filebeat-filebeat-7vx2t          0/1     Running   0          104s
+filebeat-filebeat-lj8s5          0/1     Running   0          105s
+filebeat-filebeat-n6vlv          0/1     Running   0          104s
+kibana-kibana-864bccc7f5-47dmn   0/1     Running   0          65s
+```
 
 7. Next, we need to set our certificate and private key values as kubeconfig secrets. This will allow us to enable TLS on our LKE clusters. 
 
