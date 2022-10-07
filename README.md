@@ -22,7 +22,7 @@ The workshop scenario builds the following components and steps-
 
 1. A Secure Shell Linode (provisioned via the Linode Cloud Manager GUI) to serve as the command console for the environment setup.
 
-2. Installing developer tools on the Secure Shell (git, terraform, and kubectl) for use in environment setup.
+2. Installing developer tools on the Secure Shell (terraform and kubectl) for use in environment setup.
 
 3. One Linode Kubernetes Engine (LKE) Cluster, deployed to a the Toronto Linode region, provisioned via terraform.
 
