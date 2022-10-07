@@ -91,7 +91,7 @@ terraform plan \
 Once deployment is complete, you should see an LKE cluster within the "Kubernetes" section of your Linode Cloud Manager account.
 
 ### Deploy Containers to LKE 
-![image](https://user-images.githubusercontent.com/7717493/194547291-9e36857b-539b-4919-9322-8c17e760ffcf.png)
+![image](https://user-images.githubusercontent.com/7717493/194547571-64489701-7191-4140-a57b-6d3ed73f838c.png)
 
 Next step is to use kubectl to deploy the elastic stack to the LKE cluster. 
 
