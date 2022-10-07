@@ -143,7 +143,7 @@ helm install elasticsearch elastic/elasticsearch
 helm install filebeat elastic/filebeat
 ```
 ```
-helm install kibana -l app=kibana-kibana 
+helm install kibana elastic/kibana
 ```
 
 
